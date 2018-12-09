@@ -1,7 +1,8 @@
 sheetUrl = "https://docs.google.com/spreadsheets/d/1wY52LF3nqJwXHzsCTel3svMbOA4LjRzcjwdbvodYpW8/edit?usp=sharing"
 var time = [];
 var plugged = [];
-var percentage = []
+var percentage = [];
+var len=0;
 
 var formdata;
 function init() {
@@ -10,14 +11,22 @@ function init() {
         callback: function (data, tabletop) {
             // console.log(data)
             formdata = data;
+            // time = [];
+            // plugged = [];
+            // percentage = [];
             formdata.forEach((bat, index) => {
                 time.push(bat.Time);
                 plugged.push(bat.plugged);
                 percentage.push(Number(bat.percentage));
                 // console.log(bat.plugged);
-                
             });
-            console.log(formdata);
+            console.log('len is ',len)
+            console.log('formlen is ',formdata.length);
+            // console.log(formdata);
+            // time = time.slice(formdata.length - len);
+            // plugged = plugged.slice(formdata.length - len);
+            // percentage = percentage.slice(formdata.length - len);
+            console.log(time, plugged, percentage);
 
         },
         simpleSheet: true
@@ -25,13 +34,19 @@ function init() {
 }
 // window.addEventListener('DOMContentLoaded', init);
 setInterval(() => {
-    
+    if (formdata == undefined)
+    {
+        len = 0;
+    }
+    else {
+        
+        len = formdata.length;
+    }
     init();
 }, 2000);
 
 let chart = document.getElementById('myChart').getContext('2d');
 
-setTimeout(() => {
 let batChart = new Chart(chart, {
     type: 'line',
     data: {
@@ -59,14 +74,14 @@ let batChart = new Chart(chart, {
                 borderWidth: 1
             }
         ]
-   } 
-    });
-}, 4000);
-//FOR plotly.js
-// TESTER = document.getElementById('tester');
-// Plotly.plot(TESTER, [{
-//     x: percentage,
-//     y:time
-// }], {
-//         margin: { t: 0 }
-//     });
+    } 
+});
+
+
+setInterval(() => {
+    batChart.data.datasets[0].data[5] = percentage;
+    batChart.data.labels[5] = time;
+    batChart.update();
+    
+}, 2000);
+
