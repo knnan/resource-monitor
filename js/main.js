@@ -11,9 +11,9 @@ function init() {
         callback: function (data, tabletop) {
             // console.log(data)
             formdata = data;
-            // time = [];
-            // plugged = [];
-            // percentage = [];
+            time = [];
+            plugged = [];
+            percentage = [];
             formdata.forEach((bat, index) => {
                 time.push(bat.Time);
                 plugged.push(bat.plugged);
@@ -79,8 +79,8 @@ let batChart = new Chart(chart, {
 
 
 setInterval(() => {
-    batChart.data.datasets[0].data[5] = percentage;
-    batChart.data.labels[5] = time;
+    batChart.data.datasets[0].data = percentage;
+    batChart.data.labels = time;
     batChart.update();
     
 }, 2000);
