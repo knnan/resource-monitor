@@ -83,5 +83,5 @@ setInterval(() => {
     batChart.data.labels = time;
     batChart.update();
     
-}, 2000);
+}, 200);
 
