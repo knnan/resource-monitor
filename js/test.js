@@ -3,10 +3,15 @@ var time = [];
 var plugged = [];
 var percentage = [];
 var cpu = [];
+var timeTemp = [];
+var pluggedTemp = [];
+var percentageTemp = [];
+var cpuTemp = [];
 var len = 0;
 var pval = 0;
 var cval = 0;
 var tval = 0;
+var plugindicator;
 
 
 var formdata;
@@ -15,25 +20,41 @@ function init() {
         key: sheetUrl,
         callback: function (data, tabletop) {
             formdata = data;
+            // console.log(formdata);  
+
+
             time = [];
             plugged = [];
             percentage = [];
             cpu = [];
+            timeTemp = [];
+            pluggedTemp = [];
+            percentageTemp = [];
+            cpuTemp = []; 
+
             formdata.forEach((bat, index) => {
                 time.push(bat.Time);
+                timeTemp.push(new Date(bat.Time).toLocaleTimeString());
+
                 plugged.push(bat.plugged);
+                pluggedTemp.push(bat.plugged);
+
                 percentage.push(Number(bat.percentage));
+                percentageTemp.push(Number(bat.percentage));
+
                 cpu.push(Number(bat.cpu));
+                cpuTemp.push(Number(bat.cpu));
             });
             // console.log('len is ', len)
             // console.log('formlen is ', formdata.length);
-            // console.log(formdata);
+            // // console.log(formdata);
+            // console.log(percentageTemp);
+           
             plugged = plugged.slice(len);
+           
             time = time.slice(len);
             percentage = percentage.slice(len);
             cpu = cpu.slice(len);
-            console.log(percentage.length);
-            console.log(percentage);
             if (cpu.length == 0) {
                 cpu = [cval];
                 time = [tval];
@@ -86,6 +107,8 @@ function onRefresh(chart) {
     //         y: cpu
     //     });
     // });
+
+
 }
 function randomScalingFactor() {
     return (Math.random() > 0.5 ? 1.0 : -1.0) * Math.round(Math.random() * 100);
@@ -105,9 +128,11 @@ var config = {
         },
         {
             label: 'Battery charge',
-            backgroundColor: color(chartColors.blue).alpha(0.5).rgbString(),
-            borderColor: chartColors.blue,
+            backgroundColor: color(chartColors.purple).alpha(0.5).rgbString(),
+            borderColor: chartColors.purple,
             fill: "start",
+            spanGaps: true,
+
             cubicInterpolationMode: 'monotone',
             data: []
         }
@@ -122,7 +147,7 @@ var config = {
             xAxes: [{
                 type: 'realtime',
                 realtime: {
-                    duration: 15000,
+                    duration: 16000,
                     refresh: 2000,
                     delay: 2000,
                     onRefresh: onRefresh
@@ -152,4 +177,46 @@ window.onload = function () {
     window.myChart = new Chart(ctx, config);
 };
 
-// let chart = document.getElementById('myChart').getContext('2d');
+
+
+let chart1 = document.getElementById('myChart1').getContext('2d');
+
+let finalchart = new Chart(chart1, {
+    type: 'line',
+    data: {
+        labels: timeTemp,
+        datasets: [
+            {
+                label: 'Batter charge',
+                data: cpuTemp,
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255,99,132,1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 1
+            }
+        ]
+    }
+});
+
+
+setInterval(() => {
+    finalchart.data.datasets[0].data = cpuTemp;
+    finalchart.data.labels = timeTemp;
+    finalchart.update();
+
+}, 20000);
+
+

@@ -10,16 +10,21 @@ function init() {
         key: sheetUrl,
         callback: function (data, tabletop) {
             formdata = data;
-            console.log(formdata);  
+            console.log(formdata); 
+            
             time = [];
             plugged = [];
             percentage = [];
+
             formdata.forEach((bat, index) => {
-                // console.log("this is the time", new Date(bat.Time).toLocaleTimeString());
+
                 time.push(new Date(bat.Time).toLocaleTimeString());
+
                 plugged.push(bat.plugged);
+                
                 percentage.push(Number(bat.cpu));
             });
+
             console.log('len is ',len)
             console.log('formlen is ',formdata.length);
             // time = time.slice(formdata.length - len);
@@ -44,9 +49,9 @@ setInterval(() => {
     init();
 }, 2000);
 
-let chart = document.getElementById('myChart').getContext('2d');
+let chart1 = document.getElementById('myChart1').getContext('2d');
 
-let batChart = new Chart(chart, {
+let finalchart = new Chart(chart1, {
     type: 'line',
     data: {
         labels: time,
@@ -78,9 +83,9 @@ let batChart = new Chart(chart, {
 
 
 setInterval(() => {
-    batChart.data.datasets[0].data = percentage;
-    batChart.data.labels = time;
-    batChart.update();
+    finalchart.data.datasets[0].data = percentage;
+    finalchart.data.labels = time;
+    finalchart.update();
     
 }, 200);
 
