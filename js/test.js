@@ -142,9 +142,9 @@ var config = {
             xAxes: [{
                 type: 'realtime',
                 realtime: {
-                    duration: 16000,
-                    refresh: 2000,
-                    delay: 2000,
+                    duration: 12000,
+                    refresh: 500,
+                    delay: 1000,
                     onRefresh: onRefresh
                 }
             }],
