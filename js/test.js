@@ -25,11 +25,11 @@ function init() {
                 percentage.push(Number(bat.percentage));
                 cpu.push(Number(bat.cpu));
             });
-            console.log('len is ', len)
-            console.log('formlen is ', formdata.length);
+            // console.log('len is ', len)
+            // console.log('formlen is ', formdata.length);
             // console.log(formdata);
-            // plugged = plugged.slice(formdata.length - len);
-            time = time.slice( len);
+            plugged = plugged.slice(len);
+            time = time.slice(len);
             percentage = percentage.slice(len);
             cpu = cpu.slice(len);
             console.log(percentage.length);
@@ -39,9 +39,7 @@ function init() {
                 time = [tval];
                 percentage = [pval];
             }
-            // if (time.length == 0) {
-                // percentage = [tval];
-            // }
+
 
         },
         simpleSheet: true
@@ -68,7 +66,7 @@ var chartColors = {
     orange: 'rgb(255, 159, 64)',
     yellow: 'rgb(255, 205, 86)',
     green: 'rgb(75, 192, 192)',
-    limegreen:'rgb(176, 241, 54)',
+    limegreen: 'rgb(176, 241, 54)',
     blue: 'rgb(54, 162, 235)',
     purple: 'rgb(153, 102, 255)',
     grey: 'rgb(201, 203, 207)'
@@ -103,17 +101,16 @@ var config = {
             fill: 'start',
             spanGaps: true,
             lineTension: 0,
-            // borderDash: [8, 4],
             data: []
         },
-            {
+        {
             label: 'Battery charge',
             backgroundColor: color(chartColors.blue).alpha(0.5).rgbString(),
             borderColor: chartColors.blue,
-            fill: false,
+            fill: "start",
             cubicInterpolationMode: 'monotone',
             data: []
-            }
+        }
         ]
     },
     options: {
@@ -138,7 +135,7 @@ var config = {
                 }
             }]
         },
-       
+
         tooltips: {
             mode: 'nearest',
             intersect: false
