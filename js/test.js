@@ -20,9 +20,7 @@ function init() {
         key: sheetUrl,
         callback: function (data, tabletop) {
             formdata = data;
-            // console.log(formdata);  
-
-
+            
             time = [];
             plugged = [];
             percentage = [];
@@ -45,10 +43,7 @@ function init() {
                 cpu.push(Number(bat.cpu));
                 cpuTemp.push(Number(bat.cpu));
             });
-            // console.log('len is ', len)
-            // console.log('formlen is ', formdata.length);
-            // // console.log(formdata);
-            // console.log(percentageTemp);
+          
            
             plugged = plugged.slice(len);
            
