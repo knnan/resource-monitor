@@ -9,24 +9,23 @@ function init() {
     Tabletop.init({
         key: sheetUrl,
         callback: function (data, tabletop) {
-            // console.log(data)
             formdata = data;
+            console.log(formdata);  
             time = [];
             plugged = [];
             percentage = [];
             formdata.forEach((bat, index) => {
-                time.push(bat.Time);
+                // console.log("this is the time", new Date(bat.Time).toLocaleTimeString());
+                time.push(new Date(bat.Time).toLocaleTimeString());
                 plugged.push(bat.plugged);
-                percentage.push(Number(bat.percentage));
-                // console.log(bat.plugged);
+                percentage.push(Number(bat.cpu));
             });
             console.log('len is ',len)
             console.log('formlen is ',formdata.length);
-            // console.log(formdata);
             // time = time.slice(formdata.length - len);
             // plugged = plugged.slice(formdata.length - len);
-            // percentage = percentage.slice(formdata.length - len);
-            console.log(time, plugged, percentage);
+            // percentage = percentage.slice( len);
+            console.log(percentage);
 
         },
         simpleSheet: true

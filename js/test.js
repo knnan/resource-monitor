@@ -2,8 +2,10 @@ sheetUrl = "https://docs.google.com/spreadsheets/d/1wY52LF3nqJwXHzsCTel3svMbOA4L
 var time = [];
 var plugged = [];
 var percentage = [];
+var cpu = [];
 var len = 0;
-var prevalue = 0;
+var pval = 0;
+var cval = 0;
 var tval = 0;
 
 
@@ -12,27 +14,30 @@ function init() {
     Tabletop.init({
         key: sheetUrl,
         callback: function (data, tabletop) {
-            // console.log(data)
             formdata = data;
             time = [];
             plugged = [];
             percentage = [];
+            cpu = [];
             formdata.forEach((bat, index) => {
                 time.push(bat.Time);
                 plugged.push(bat.plugged);
                 percentage.push(Number(bat.percentage));
-                // console.log(bat.plugged);
+                cpu.push(Number(bat.cpu));
             });
             console.log('len is ', len)
             console.log('formlen is ', formdata.length);
             // console.log(formdata);
-            // time = time.slice( len);
             // plugged = plugged.slice(formdata.length - len);
+            time = time.slice( len);
             percentage = percentage.slice(len);
+            cpu = cpu.slice(len);
             console.log(percentage.length);
             console.log(percentage);
-            if (percentage.length == 0) {
-                percentage = [prevalue];
+            if (cpu.length == 0) {
+                cpu = [cval];
+                time = [tval];
+                percentage = [pval];
             }
             // if (time.length == 0) {
                 // percentage = [tval];
@@ -50,8 +55,10 @@ setInterval(() => {
     else {
 
         len = formdata.length;
-        prevalue = percentage[percentage.length - 1];
-        // tval = time[time.length - 1];
+        cval = cpu[cpu.length - 1];
+        tval = time[time.length - 1];
+        pval = percentage[percentage.length - 1];
+
     }
     init();
 }, 2000);
@@ -67,12 +74,20 @@ var chartColors = {
     grey: 'rgb(201, 203, 207)'
 };
 function onRefresh(chart) {
-    chart.config.data.datasets.forEach(function (dataset) {
-        dataset.data.push({
-            x: Date.now(),
-            y: percentage
-        });
+    chart.config.data.datasets[0].data.push({
+        x: Date.parse(time),
+        y: cpu
     });
+    chart.config.data.datasets[1].data.push({
+        x: Date.parse(time),
+        y: percentage
+    });
+    //     forEach(function (dataset) {
+    //     dataset.data.push({
+    //         x:Date.parse(time),
+    //         y: cpu
+    //     });
+    // });
 }
 function randomScalingFactor() {
     return (Math.random() > 0.5 ? 1.0 : -1.0) * Math.round(Math.random() * 100);
@@ -82,22 +97,23 @@ var config = {
     type: 'line',
     data: {
         datasets: [{
-            label: 'Battery Charge',
+            label: 'Cpu ',
             backgroundColor: color(chartColors.green).alpha(0.5).rgbString(),
             borderColor: chartColors.limegreen,
             fill: 'start',
+            spanGaps: true,
             lineTension: 0,
             // borderDash: [8, 4],
             data: []
         },
-            // {
-            // label: 'Dataset 2 (cubic interpolation)',
-            // backgroundColor: color(chartColors.blue).alpha(0.5).rgbString(),
-            // borderColor: chartColors.blue,
-            // fill: false,
-            // cubicInterpolationMode: 'monotone',
-            // data: []
-            // }
+            {
+            label: 'Battery charge',
+            backgroundColor: color(chartColors.blue).alpha(0.5).rgbString(),
+            borderColor: chartColors.blue,
+            fill: false,
+            cubicInterpolationMode: 'monotone',
+            data: []
+            }
         ]
     },
     options: {
@@ -122,6 +138,7 @@ var config = {
                 }
             }]
         },
+       
         tooltips: {
             mode: 'nearest',
             intersect: false
