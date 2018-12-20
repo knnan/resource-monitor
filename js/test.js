@@ -31,6 +31,7 @@ function init() {
             cpuTemp = []; 
 
             formdata.forEach((bat, index) => {
+                console.log('runnning');
                 time.push(bat.Time);
                 timeTemp.push(new Date(bat.Time).toLocaleTimeString());
 
@@ -143,12 +144,13 @@ var config = {
                 type: 'realtime',
                 realtime: {
                     duration: 16000,
-                    refresh: 500,
+                    refresh: 2000,
                     delay: 1000,
                     onRefresh: onRefresh
                 }
             }],
             yAxes: [{
+
                 scaleLabel: {
                     display: true,
                     labelString: 'value'
@@ -212,6 +214,6 @@ setInterval(() => {
     finalchart.data.labels = timeTemp;
     finalchart.update();
 
-}, 20000);
+}, 60000);
 
 
